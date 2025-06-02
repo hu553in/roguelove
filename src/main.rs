@@ -1,36 +1,78 @@
-use std::fs;
-use std::io::{self, Write};
-use std::thread;
-use std::time::Duration;
+use crossterm::event::{self, Event, KeyCode, KeyEvent};
+use std::io;
+
+mod assets;
+use assets::LOGO_TEXT;
+
+#[derive(Debug, Clone, PartialEq)]
+pub enum Scene {
+    MainMenu,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub enum Action {
+    Exit,
+}
+
+struct State {
+    scene: Scene,
+}
+
+impl State {
+    fn new() -> Self {
+        Self {
+            scene: Scene::MainMenu,
+        }
+    }
+}
 
 fn main() {
-    if let Err(e) = (|| -> io::Result<()> {
-        logo()?;
-        wait_for_enter()?;
-        Ok(())
-    })() {
-        eprintln!("Error: {}", e);
-        std::process::exit(1);
+    let mut term = ratatui::init();
+    let state = State::new();
+
+    // main loop
+    loop {
+        // draw frame
+        term.draw(|frame| draw(frame, &state))
+            .expect("failed to draw frame");
+
+        // handle input events
+        if let Some(action) = handle_input_event(&state).expect("failed to handle input event") {
+            match action {
+                Action::Exit => break,
+            }
+        }
+    }
+
+    // restore terminal state
+    ratatui::restore();
+}
+
+fn handle_input_event(state: &State) -> io::Result<Option<Action>> {
+    match event::read()? {
+        Event::Key(key_event) => Ok(handle_key_event(key_event, state)),
+        _ => Ok(None),
     }
 }
 
-fn logo() -> io::Result<()> {
-    let logo_content = fs::read_to_string("assets/logo.txt")?;
-
-    println!();
-    for line in logo_content.lines() {
-        println!("{}", line);
-        thread::sleep(Duration::from_millis(200));
+fn handle_key_event(key_event: KeyEvent, state: &State) -> Option<Action> {
+    match key_event.code {
+        KeyCode::Enter => {
+            if state.scene == Scene::MainMenu {
+                Some(Action::Exit)
+            } else {
+                None
+            }
+        }
+        KeyCode::Esc | KeyCode::Char('q') => Some(Action::Exit),
+        _ => None,
     }
-
-    Ok(())
 }
 
-fn wait_for_enter() -> io::Result<()> {
-    io::stdout().flush()?;
-
-    let mut input = String::new();
-    io::stdin().read_line(&mut input)?;
-
-    Ok(())
+fn draw(frame: &mut ratatui::Frame, state: &State) {
+    match state.scene {
+        Scene::MainMenu => {
+            frame.render_widget(&*LOGO_TEXT, frame.area());
+        }
+    }
 }
