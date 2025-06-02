@@ -21,8 +21,11 @@ jobs:
       - name: Build
         run: just build
 
-      - name: Run tests
+      - name: Test
         run: just test
 
-      - name: Lint
-        run: just lint
+      - name: Check by Rustfmt
+        run: just fmt-check
+
+      - name: Check by Clippy
+        run: just clippy-check

@@ -1,17 +1,25 @@
 build:
-    cargo build --verbose
+    cargo build
 
 test:
-    cargo test --verbose
+    cargo test
 
 run:
-    cargo run --verbose
+    cargo run
 
-lint:
-    cargo clippy --verbose -- -D warnings
+fmt:
+    cargo fmt
 
-lint-fix:
-    cargo clippy --verbose --fix -- -D warnings
+fmt-check:
+    cargo fmt --all -- --check
 
-lint-fix-dirty:
-    cargo clippy --verbose --fix --allow-dirty -- -D warnings
+clippy-check:
+    cargo clippy -- -D warnings
+
+clippy-fix:
+    cargo clippy --fix -- -D warnings
+
+clippy-fix-dirty:
+    cargo clippy --fix --allow-dirty -- -D warnings
+
+all-checks: build test fmt-check clippy-check
