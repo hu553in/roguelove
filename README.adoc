@@ -1,5 +1,10 @@
 = ROGUELOVE 🪄
 
+image:https://github.com/hu553in/roguelove/actions/workflows/ci.yml/badge.svg[CI, link=https://github.com/hu553in/roguelove/actions/workflows/ci.yml]
+image:https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit[pre-commit, link=https://github.com/pre-commit/pre-commit]
+image:https://img.shields.io/github/last-commit/hu553in/roguelove?logo=git[last-commit, link=https://github.com/hu553in/roguelove/commits/main]
+
+
 While we're working on that, you can check out the logo:
 
 [source,txt,options="nowrap"]
