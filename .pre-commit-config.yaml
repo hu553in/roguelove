@@ -1,0 +1,15 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: mixed-line-ending
+  - repo: local
+    hooks:
+      - id: all-checks
+        name: all checks
+        entry: just all-checks
+        language: system
+        always_run: true
+        pass_filenames: false
