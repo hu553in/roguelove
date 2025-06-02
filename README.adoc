@@ -1,3 +1,8 @@
 = ROGUELOVE 🪄
 
-TBD
+While we're working on that, you can check out the logo:
+
+[source,txt,options="nowrap"]
+----
+include::assets/logo.txt[]
+----
